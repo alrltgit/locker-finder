@@ -42,18 +42,37 @@
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
-        const user_lat = 52.1943
-        const user_lon = 21.0122
 
-        fetch(`/api/lockers/nearest?lat=${user_lat}&lon=${user_lon}`)
-            .then(response => response.json())
-            .then(data => {
-                data.forEach(locker => {
-                    L.marker([locker["lat"], locker["lon"]])
-                    .addTo(map)
-                    .bindPopup(locker["name"])
-                });
-            });
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const user_lat = position.coords.latitude
+                    const user_lon = position.coords.longitude
+
+                    console.log(user_lat)
+                    console.log(user_lon)
+
+                    map.setView([user_lat, user_lon], 13)
+
+                    fetch(`/api/lockers/nearest?lat=${user_lat}&lon=${user_lon}`)
+                        .then(response => response.json())
+                        .then(data => {
+                            data.forEach(locker => {
+                                if (locker["lat"] && locker["lon"]) {
+                                    L.marker([locker["lat"], locker["lon"]])
+                                    .addTo(map)
+                                    .bindPopup(locker["name"])
+                                }
+                            });
+                        });
+                },
+                (error) => {
+                    console.error("Geolocation error:", error.message)
+                }
+            );
+        } else {
+            console.error("Geolocation is not supported by this browser")
+        }
     </script>
 </body>
 </html>
