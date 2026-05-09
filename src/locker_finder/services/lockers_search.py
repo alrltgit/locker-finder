@@ -10,7 +10,7 @@ def find_nearest_lockers(lockers: list, user_lon: float, user_lat: float) -> lis
     for idx, locker in enumerate(lockers):
         distance = find_distance(user_lon, user_lat, locker["lon"], locker["lat"])
 
-        if len(nearest_lockers) != 10:
+        if len(nearest_lockers) != 3:
             distances.append(distance)
             nearest_lockers.append(locker)
             continue
