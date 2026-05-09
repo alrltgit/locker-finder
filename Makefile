@@ -1,4 +1,7 @@
-.PHONY: build run
+.PHONY: install build run
+
+install:
+	pip install -e .
 
 build:
 	python3 -m build
