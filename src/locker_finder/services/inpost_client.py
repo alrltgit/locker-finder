@@ -1,6 +1,6 @@
 import requests
 import uuid
-from ..utils.decorators import handle_errors
+from ..utils.decorators import handle_runtime_error
 
 class InPostClient:
     BASE_URL = "https://api-global-points.easypack24.net/v1/points"
@@ -9,7 +9,7 @@ class InPostClient:
         self.api_key = api_key
         self.session = requests.Session()
 
-    @handle_errors
+    @handle_runtime_error
     def _fetch(self, params: dict):
         """ Make the HTTP request and return parsed JSON """
         response = self.session.get(self.BASE_URL, params=params, timeout=10)

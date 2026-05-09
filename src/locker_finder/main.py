@@ -1,25 +1,9 @@
-from .services.inpost_client import InPostClient
-from .services.lockers_search import find_nearest_lockers
+import os
+from flask import Flask
+from .routes.api_endpoints import bp as locker_bp
 
-def main():
-    client = InPostClient()
-
-    user_lat = 52.2297
-    user_lon = 21.0122
-
-    lockers = client.get_lockers_data(user_lat, user_lon)
-    nearest_lockers = find_nearest_lockers(lockers, user_lon, user_lat)
-
-    print(f"Found: {len(nearest_lockers)} lockers\n")
-
-    for l in nearest_lockers:
-        print({
-            "id": l["id"],
-            "city": l["city"],
-            "lat": l["lat"],
-            "lon": l["lon"],
-            "status": l["status"]
-        })
+app = Flask(__name__, root_path=os.path.dirname(__file__))
+app.register_blueprint(locker_bp)
 
 if __name__ == '__main__':
-    main()
+    app.run(debug=True)

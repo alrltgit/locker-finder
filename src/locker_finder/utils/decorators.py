@@ -1,6 +1,6 @@
 import requests
 
-def handle_errors(func):
+def handle_runtime_error(func):
     def wrapper(*args, **kwargs):
         try:
             return func(*args, **kwargs)
