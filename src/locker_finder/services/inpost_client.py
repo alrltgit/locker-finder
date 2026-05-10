@@ -61,6 +61,4 @@ class InPostClient:
             "open_hours": item.get("open_hours"),
             "is_24_7": item.get("location_247", False),
             "availability_status": locker_availability.get("longitude"),
-
-            "raw": item
         }

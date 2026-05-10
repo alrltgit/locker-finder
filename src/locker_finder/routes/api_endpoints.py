@@ -11,9 +11,7 @@ def display_map():
 @bp.route("/api/lockers/nearest")
 def get_nearest_lockers():
     lat = request.args.get("lat")
-    print(lat)
     lon = request.args.get("lon")
-    print(lon)
 
     if lat is None or lon is None:
         return jsonify({"error": "lat and lon are required"}), 400
