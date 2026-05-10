@@ -1,5 +1,8 @@
 .PHONY: install build run
 
+dev:
+	pip install -e ".[dev]"
+
 install:
 	pip install -e .
 
