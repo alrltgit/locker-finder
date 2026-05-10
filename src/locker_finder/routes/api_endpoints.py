@@ -26,11 +26,6 @@ def get_nearest_lockers():
 
     client = InPostClient()
     lockers = client.get_lockers_data(user_lat, user_lon)
-    nearest_lockers = find_nearest_lockers(lockers, user_lat, user_lon)
-    # print(len(nearest_lockers))
+    nearest_lockers = find_nearest_lockers(lockers, user_lon, user_lat)
 
-    # for locker in nearest_lockers:
-    #     print("locker[lat]: ", locker["lat"])
-    #     print("locker[lon]: ", locker["lon"])
-    #     print()
     return jsonify(nearest_lockers)
