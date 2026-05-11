@@ -35,6 +35,7 @@
 <body>
     <div id="map"></div>
     <script>
+
         var map = L.map('map').setView([51.9194, 19.1451], 6)
 
         L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
@@ -42,37 +43,55 @@
             attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
         }).addTo(map);
 
+        let FALLBACK_LAT = 52.2297;
+        let FALLBACK_LON = 21.0122;
 
-        if (navigator.geolocation) {
+        const cachedLat = sessionStorage.getItem("user_lat");
+        const cachedLon = sessionStorage.getItem("user_lon")
+
+        if (cachedLat && cachedLon) {
+            loadMap(parseFloat(cachedLat), parseFloat(cachedLon))
+        } else if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    const user_lat = position.coords.latitude
-                    const user_lon = position.coords.longitude
+                    const user_lat = position.coords.latitude;
+                    const user_lon = position.coords.longitude;
 
-                    console.log(user_lat)
-                    console.log(user_lon)
+                    sessionStorage.setItem("user_lat", user_lat);
+                    sessionStorage.setItem("user_lon", user_lon);
 
-                    map.setView([user_lat, user_lon], 13)
-
-                    fetch(`/api/lockers/nearest?lat=${user_lat}&lon=${user_lon}`)
-                        .then(response => response.json())
-                        .then(data => {
-                            data.forEach(locker => {
-                                if (locker["lat"] && locker["lon"]) {
-                                    L.marker([locker["lat"], locker["lon"]])
-                                    .addTo(map)
-                                    .bindPopup(locker["name"])
-                                }
-                            });
-                        });
+                    loadMap(user_lat, user_lon);
                 },
                 (error) => {
-                    console.error("Geolocation error:", error.message)
-                }
+                    console.warn("Geolocation failed, using fallback:", error.message);
+                    loadMap(FALLBACK_LAT, FALLBACK_LON); // ← use fallback
+                },
+                { timeout: 10000, maximumAge: 60000 }
             );
         } else {
-            console.error("Geolocation is not supported by this browser")
+            loadMap(FALLBACK_LAT, FALLBACK_LON);
         }
+
+        function loadMap(lat, lon) {
+            map.setView([lat, lon], 13);
+            fetch(`/api/lockers/nearest?lat=${lat}&lon=${lon}`)
+                .then(response => {
+                    if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
+                    return response.json();
+                })
+                .then(data => {
+                    if (!Array.isArray(data) || data.length === 0) return;
+                    data.forEach(locker => {
+                        if (locker["lat"] && locker["lon"]) {
+                            L.marker([locker["lat"], locker["lon"]])
+                                .addTo(map)
+                                .bindPopup(locker["name"]);
+                        }
+                    });
+                })
+                .catch(err => console.error("Failed to fetch lockers:", err));
+        }
+
     </script>
 </body>
 </html>

@@ -1,6 +1,8 @@
 from flask import Blueprint, request, jsonify, render_template
-from ..services.inpost_client import InPostClient
-from ..services.lockers_search import find_nearest_lockers
+
+from ..repository.locker_repository import LockerRepository
+from ..services.lockers_search import LockerSearch
+from ..db.database import get_session
 
 bp = Blueprint("lockers", __name__)
 
@@ -10,20 +12,15 @@ def display_map():
 
 @bp.route("/api/lockers/nearest")
 def get_nearest_lockers():
-    lat = request.args.get("lat")
-    lon = request.args.get("lon")
+    user_lat = request.args.get("lat")
+    user_lon = request.args.get("lon")
 
-    if lat is None or lon is None:
+    if user_lat is None or user_lon is None:
         return jsonify({"error": "lat and lon are required"}), 400
 
-    try:
-        user_lat = float(lat)
-        user_lon = float(lon)
-    except ValueError:
-        return jsonify({"error": "lat and lon must be numbers"}), 400
+    with get_session() as session:
+        repository = LockerRepository(session)
+        locker_search = LockerSearch(repository)
 
-    client = InPostClient()
-    lockers = client.get_lockers_data(user_lat, user_lon)
-    nearest_lockers = find_nearest_lockers(lockers, user_lon, user_lat)
-
-    return jsonify(nearest_lockers)
+        nearest_lockers = locker_search.find_nearest_lockers(float(user_lon), float(user_lat))
+    return jsonify([ locker.model_dump() for locker in nearest_lockers ])
