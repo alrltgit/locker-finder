@@ -9,7 +9,11 @@
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
      integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
      crossorigin=""></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
+    <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
     <style>
+
         * {
             box-sizing: border-box;
             margin: 0;
@@ -38,6 +42,7 @@
             height: 90vh;
             width: 100%;
         }
+
     </style>
 </head>
 <body>
@@ -81,6 +86,9 @@
             loadMap(FALLBACK_LAT, FALLBACK_LON);
         }
 
+        let markerClusterGroup = L.markerClusterGroup({ maxClusterRadius: 120 });
+        map.addLayer(markerClusterGroup);
+
         function loadMap(lat, lon) {
             map.setView([lat, lon], 13);
             fetch(`/api/lockers/nearest?lat=${lat}&lon=${lon}`)
@@ -90,11 +98,14 @@
                 })
                 .then(data => {
                     if (!Array.isArray(data) || data.length === 0) return;
+
+                    markerClusterGroup.clearLayers();
+
                     data.forEach(locker => {
                         if (locker["lat"] && locker["lon"]) {
-                            L.marker([locker["lat"], locker["lon"]])
-                                .addTo(map)
+                            const marker = L.marker([locker["lat"], locker["lon"]])
                                 .bindPopup(locker["name"]);
+                            markerClusterGroup.addLayer(marker);
                         }
                     });
                 })
