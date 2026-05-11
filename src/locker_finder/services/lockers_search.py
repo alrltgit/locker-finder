@@ -1,25 +1,31 @@
 from ..utils.geo import find_distance
 
-def find_nearest_lockers(lockers: list, user_lon: float, user_lat: float) -> list:
-    """
-    Find 10 nearest lockers
-    """
-    nearest_lockers = []
-    distances = []
+class LockerSearch:
+    def __init__(self, repository):
+        self.repository = repository
 
-    for idx, locker in enumerate(lockers):
-        distance = find_distance(user_lon, user_lat, locker["lon"], locker["lat"])
+    def find_nearest_lockers(self, user_lon: float, user_lat: float, limit: int = 10) -> list:
+        """
+        Find 10 nearest lockers
+        """
+        nearest_lockers = []
+        distances = []
 
-        if len(nearest_lockers) < 5:
-            distances.append(distance)
-            nearest_lockers.append(locker)
-            continue
+        lockers = self.repository.get_all_lockers()
 
-        max_dist = max(distances)
+        for idx, locker in enumerate(lockers):
+            distance = find_distance(user_lon, user_lat, locker.lon, locker.lat)
 
-        if distance < max_dist:
-            max_dist_idx = distances.index(max_dist)
-            nearest_lockers[max_dist_idx] = locker
-            distances[max_dist_idx] = distance
+            if len(nearest_lockers) < limit:
+                distances.append(distance)
+                nearest_lockers.append(locker)
+                continue
 
-    return nearest_lockers
+            max_dist = max(distances)
+
+            if distance < max_dist:
+                max_dist_idx = distances.index(max_dist)
+                nearest_lockers[max_dist_idx] = locker
+                distances[max_dist_idx] = distance
+
+        return nearest_lockers
