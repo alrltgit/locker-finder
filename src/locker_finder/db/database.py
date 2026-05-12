@@ -22,12 +22,3 @@ engine = create_engine(DATABASE_URL, echo=True)
 
 def get_session():
     return Session(engine)
-
-def create_db_and_tables():
-    with engine.connect() as connection:
-        connection.execute(
-            text("CREATE SCHEMA IF NOT EXISTS locker_finder;")
-        )
-        connection.commit()
-
-    SQLModel.metadata.create_all(engine)
