@@ -1,7 +1,7 @@
 """
 Set up the database connection
 """
-from sqlmodel import SQLModel, create_engine, Session
+from sqlmodel import create_engine, Session
 import os
 
 DATABASE_URL = os.getenv("POSTGRES_URL")
