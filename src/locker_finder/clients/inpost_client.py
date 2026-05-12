@@ -17,11 +17,11 @@ class InPostClient:
     def _fetch_page(self, page: int):
         """ Make the HTTP request and return parsed JSON """
 
-        response = self.session.get(self.BASE_URL, params={"page": page}, timeout=10)
+        response = self.session.get(self.BASE_URL, params={"page": page}, timeout=30)
         response.raise_for_status()
         return response.json()
 
-    def _fetch_pages_in_parallel(self, start: int, end: int, max_workers: int = 10):
+    def _fetch_pages_in_parallel(self, start: int, end: int, max_workers: int = 5):
         """ Fetch pages in parallel """
 
         results = []
@@ -32,23 +32,50 @@ class InPostClient:
                 for page in range(start, end + 1)
             }
 
-            for future in as_completed(future_to_page):
-                data = future.result()
-                results.append(data)
+            try:
+                for future in as_completed(future_to_page):
+                    data = future.result()
+                    results.append(data)
+            except RuntimeError as e:
+                page = future_to_page[future]
+                print(f"Skipping page {page}: {e}")
 
         return results
 
-    def seed_lockers_to_db(self):
+    @staticmethod
+    def _is_test_data(item):
+        location = item.get("location", {})
+        address_details = item.get("address_details", {})
 
+        markers = ["test", "x"]
+        city = address_details.get("city").lower()
+
+        if (location.get("latitude") == 0 and location.get("longitude") == 0)\
+            or (city in markers or city == "Test"):
+            return True
+
+        return False
+
+    def seed_lockers_to_db(self):
         buffer = StringIO()
         writer = csv.writer(buffer)
 
         pages_data = self._fetch_pages_in_parallel(1, 1360)
 
+        seen_names = set()
+
         for page_data in pages_data:
             items = page_data.get("items", [])
 
             for item in items:
+                if self._is_test_data(item):
+                    continue
+
+                name = item.get("name")
+                if name in seen_names:
+                    continue
+                seen_names.add(name)
+
                 row = self.parse_data(item)
                 writer.writerow(row)
 
@@ -107,6 +134,6 @@ class InPostClient:
             address_details.get("city"),
             address_details.get("province"),
             address_details.get("post_code"),
-            item.get("open_hours"),
+            item.get("opening_hours"),
             item.get("location_247", False)
         ]
