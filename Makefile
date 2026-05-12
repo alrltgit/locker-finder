@@ -1,13 +1,23 @@
-.PHONY: install build run
+include .env
+export
 
-dev:
-	pip install -e ".[dev]"
+.PHONY: install build run up down reset db
 
-install:
-	pip install -e .
+up:
+	docker-compose up -d
+
+down:
+	docker-compose down
+
+reset: down up
+
+seed:
+	python3 -m src.locker_finder.scripts.seed
+
+setup: up seed
+
+db:
+	docker exec -it ${POSTGRES_DB} psql -U ${POSTGRES_USER} -d ${POSTGRES_DB}
 
 build:
-	python3 -m build
-
-run:
-	python3 -m locker_finder.main
+	docker-compose build --no-cache

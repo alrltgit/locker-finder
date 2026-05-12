@@ -5,22 +5,11 @@ from sqlalchemy import pool
 
 from alembic import context
 from src.locker_finder.db.models.lockers import Lockers
-from dotenv import load_dotenv
 import os
-
-load_dotenv()
 
 config = context.config
 
-POSTGRES_USER = os.getenv("POSTGRES_USER")
-POSTGRES_PASSWORD = os.getenv("POSTGRES_PASSWORD")
-POSTGRES_DB = os.getenv("POSTGRES_DB")
-
-DATABASE_URL = (
-    f"postgresql+psycopg2://"
-    f"{POSTGRES_USER}:{POSTGRES_PASSWORD}"
-    f"@localhost:5432/{POSTGRES_DB}"
-)
+DATABASE_URL = os.getenv("POSTGRES_URL")
 
 config.set_main_option("sqlalchemy.url", DATABASE_URL)
 
