@@ -113,6 +113,78 @@ class InPostClient:
             cursor.close()
             connection.close()
 
+    def sync_lockers(self):
+        pages_data = self._fetch_pages_in_parallel(1, 1360)
+
+        seen_names = set()
+        rows = []
+
+        for page_data in pages_data:
+            for item in page_data.get("items", []):
+                if self._is_test_data(item):
+                    continue
+                name = item.get("name")
+                if name in seen_names:
+                    continue
+                seen_names.add(name)
+                rows.append(self.parse_data(item))
+
+        buffer = StringIO()
+        writer = csv.writer(buffer)
+        writer.writerows(rows)
+        buffer.seek(0)
+
+        connection = engine.raw_connection()
+        cursor = connection.cursor()
+
+        try:
+            # 1. Load fresh API data into a temp table
+            cursor.execute("""
+                CREATE TEMP TABLE lockers_staging
+                (LIKE locker_finder.lockers INCLUDING ALL)
+                ON COMMIT DROP;
+            """)
+
+            cursor.copy_expert(
+                """
+                COPY lockers_staging (
+                    id, external_href, name, type, status, physical_type,
+                    lat, lon, address_line1, address_line2, city, province,
+                    post_code, open_hours, is_24_7
+                )
+                FROM STDIN WITH CSV
+                """,
+                buffer
+            )
+
+            # 2. Upsert: insert new, update changed
+            cursor.execute("""
+                INSERT INTO locker_finder.lockers
+                SELECT * FROM lockers_staging
+                ON CONFLICT (name) DO UPDATE SET
+                    status       = EXCLUDED.status,
+                    lat          = EXCLUDED.lat,
+                    lon          = EXCLUDED.lon,
+                    address_line1 = EXCLUDED.address_line1,
+                    address_line2 = EXCLUDED.address_line2,
+                    city         = EXCLUDED.city,
+                    province     = EXCLUDED.province,
+                    post_code    = EXCLUDED.post_code,
+                    open_hours   = EXCLUDED.open_hours,
+                    is_24_7      = EXCLUDED.is_24_7;
+            """)
+
+            # 3. Remove lockers that no longer exist in the API
+            cursor.execute("""
+                DELETE FROM locker_finder.lockers
+                WHERE name NOT IN (SELECT name FROM lockers_staging);
+            """)
+
+            connection.commit()
+        finally:
+            cursor.close()
+            connection.close()
+
     @staticmethod
     def parse_data(item:dict) -> list:
         """ Map a raw API into a dict """

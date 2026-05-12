@@ -1,0 +1,1 @@
+0 2 * * * cd /locker_finder && python -m src.locker_finder.scripts.seed >> /var/log/cron.log 2>&1
