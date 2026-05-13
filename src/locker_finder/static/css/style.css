@@ -45,19 +45,52 @@ body {
     outline: none;
 }
 
-#location-notice {
-    width: 100%;
-    padding: 8px 12px;
-    font-size: 13px;
-    text-align: center;
-}
-
 #map {
     height: 90vh;
     width: 100%;
 }
 
-/* small cluster (less than 10 markers) */
+.locker-popup {
+    font-family: sans-serif;
+    font-size: 16px;
+    min-width: 280px;
+    color: #333;
+}
+
+.locker-popup h3 {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 12px;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #eee;
+    color: #111;
+}
+
+.locker-popup p {
+    margin: 8px 0;
+    line-height: 1.5;
+}
+
+.locker-popup strong {
+    color: #555;
+    font-weight: 600;
+}
+
+.locker-popup a {
+    display: inline-block;
+    margin-top: 14px;
+    padding: 10px 20px;
+    background-color: #333;
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+.locker-popup a:hover {
+    background-color: #555;
+}
+
 .marker-cluster-small {
     width: 42px !important;
     height: 42px !important;
@@ -70,7 +103,6 @@ body {
     font-size: 18px;
 }
 
-/* medium cluster (10-99 markers) */
 .marker-cluster-medium {
     width: 50px !important;
     height: 50px !important;
@@ -85,7 +117,6 @@ body {
     border-radius: 50% !important;
 }
 
-/* large cluster (100+ markers) */
 .marker-cluster-large {
     width: 58px !important;
     height: 58px !important;

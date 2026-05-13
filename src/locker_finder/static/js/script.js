@@ -106,9 +106,6 @@ function formLockerInfo(locker) {
         <div class="locker-popup">
             <h3>${locker.name}</h3>
             <p><strong>Address:</strong> ${locker.address_line1}, ${locker.address_line2}</p>
-            <p><strong>City:</strong> ${locker["city"]}</p>
-            <p><strong>Province:</strong> ${locker.province}</p>
-            <p><strong>Post code:</strong> ${locker.post_code}</p>
             <p><strong>Opening hours:</strong> ${locker.open_hours ?? "24/7"}</p>
             <p><strong>Status:</strong> ${locker.status}</p>
             <a href="https://www.google.com/maps?q=${locker.lat},${locker.lon}" target="_blank">
@@ -120,8 +117,5 @@ function formLockerInfo(locker) {
 }
 
 function showLocationNotice(error) {
-    const notice = document.getElementById("location");
-    let message = "Location access was denied. Showing results for Warsaw. Enable location in your browser";
-    notice.textContent = message;
-    notice.style.display = "block";
+    alert("Location access was denied. Showing results for Warsaw. Enable location in your browser");
 }
