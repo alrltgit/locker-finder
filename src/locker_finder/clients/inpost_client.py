@@ -13,7 +13,7 @@ class InPostClient:
         self.api_key = api_key
         self.session = requests.Session()
 
-    @handle_runtime_error
+    @handle_runtime_error(message="InPost API error")
     def _fetch_page(self, page: int):
         """ Make the HTTP request and return parsed JSON """
 
@@ -82,7 +82,6 @@ class InPostClient:
         cursor = connection.cursor()
 
         try:
-            # 1. Load fresh API data into a temp table
             cursor.execute("""
                 CREATE TEMP TABLE lockers_staging
                 (LIKE locker_finder.lockers INCLUDING ALL)
@@ -101,7 +100,6 @@ class InPostClient:
                 buffer
             )
 
-            # 2. Upsert: insert new, update changed
             cursor.execute("""
                 INSERT INTO locker_finder.lockers
                 SELECT * FROM lockers_staging
@@ -118,7 +116,6 @@ class InPostClient:
                     is_24_7      = EXCLUDED.is_24_7;
             """)
 
-            # 3. Remove lockers that no longer exist in the API
             cursor.execute("""
                 DELETE FROM locker_finder.lockers
                 WHERE name NOT IN (SELECT name FROM lockers_staging);

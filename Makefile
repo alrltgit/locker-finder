@@ -3,6 +3,9 @@ export
 
 .PHONY: install build run up down reset db
 
+build:
+	docker-compose build --no-cache
+
 up:
 	docker-compose up -d
 
@@ -14,10 +17,9 @@ reset: down up
 seed:
 	python3 -m src.locker_finder.scripts.seed
 
-setup: up seed
+run: build up
 
 db:
 	docker exec -it ${POSTGRES_DB} psql -U ${POSTGRES_USER} -d ${POSTGRES_DB}
 
-build:
-	docker-compose build --no-cache
+setup: build up seed
