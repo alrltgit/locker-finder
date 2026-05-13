@@ -23,10 +23,13 @@ services:
       - .env
     ports:
       - "5001:5000"
+    volumes:
+      - .:/locker_finder
     depends_on:
       db:
         condition: service_healthy
     environment:
+      - FLASK_DEBUG=1
       - POSTGRES_URL=postgresql+psycopg2://${POSTGRES_USER}:${POSTGRES_PASSWORD}@db:5432/${POSTGRES_DB}
       - FLASK_APP=src/locker_finder/main.py
 

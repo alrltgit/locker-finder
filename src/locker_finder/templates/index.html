@@ -12,122 +12,19 @@
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.Default.css" />
     <script src="https://unpkg.com/leaflet.markercluster@1.4.1/dist/leaflet.markercluster.js"></script>
-    <style>
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-        }
-
-        html,
-        body {
-            height: 100%;
-        }
-
-        body {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #title {
-            width: 100%;
-            margin: 0px 0px 10px 10px;
-            font-size: 35px;
-            font-weight: bold;
-        }
-
-        #map {
-            height: 90vh;
-            width: 100%;
-        }
-
-    </style>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
 </head>
 <body>
-    <div id="title"> Find lockers near you </div>
+    <div class="top">
+        <p id="title"> Find lockers </p>
+        <select id="options">
+            <option value="nearest"> Near me </option>
+            <option value="all"> All </option>
+        </select>
+    </div>
+    <div id="location-notice"></div>
     <div id="map"></div>
-    <script>
 
-        var map = L.map('map').setView([51.9194, 19.1451], 6)
-
-        L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-            maxZoom: 19,
-            attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-        }).addTo(map);
-
-        let FALLBACK_LAT = 52.2297;
-        let FALLBACK_LON = 21.0122;
-
-        const cachedLat = sessionStorage.getItem("user_lat");
-        const cachedLon = sessionStorage.getItem("user_lon")
-
-        if (cachedLat && cachedLon) {
-            loadMap(parseFloat(cachedLat), parseFloat(cachedLon))
-        } else if (navigator.geolocation) {
-            navigator.geolocation.getCurrentPosition(
-                (position) => {
-                    const user_lat = position.coords.latitude;
-                    const user_lon = position.coords.longitude;
-
-                    sessionStorage.setItem("user_lat", user_lat);
-                    sessionStorage.setItem("user_lon", user_lon);
-
-                    loadMap(user_lat, user_lon);
-                },
-                (error) => {
-                    console.warn("Geolocation failed, using fallback:", error.message);
-                    loadMap(FALLBACK_LAT, FALLBACK_LON); // ← use fallback
-                },
-                { timeout: 10000, maximumAge: 60000 }
-            );
-        } else {
-            loadMap(FALLBACK_LAT, FALLBACK_LON);
-        }
-
-        let markerClusterGroup = L.markerClusterGroup({ maxClusterRadius: 120 });
-        map.addLayer(markerClusterGroup);
-
-        function loadMap(lat, lon) {
-            map.setView([lat, lon], 13);
-            fetch(`/api/lockers/nearest?lat=${lat}&lon=${lon}`)
-                .then(response => {
-                    if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
-                    return response.json();
-                })
-                .then(data => {
-                    if (!Array.isArray(data) || data.length === 0) return;
-
-                    markerClusterGroup.clearLayers();
-
-                    data.forEach(locker => {
-
-                            const lockerInfo = `
-                                <div class="locker-popup">
-                                    <h3>${locker.name}</h3>
-                                    <p><strong>Address:</strong> ${locker.address_line1}, ${locker.address_line2}</p>
-                                    <p><strong>City:</strong> ${locker["city"]}</p>
-                                    <p><strong>Province:</strong> ${locker.province}</p>
-                                    <p><strong>Post code:</strong> ${locker.post_code}</p>
-                                    <p><strong>Opening hours:</strong> ${locker.open_hours ?? "24/7"}</p>
-                                    <p><strong>Status:</strong> ${locker.status}</p>
-                                    <a href="https://www.google.com/maps?q=${locker.lat},${locker.lon}" target="_blank">
-                                        Open in Google Maps
-                                    </a>
-                                </div>
-                            `;
-
-                        if (locker.lat && locker.lon) {
-                            const marker = L.marker([locker.lat, locker.lon])
-                                .bindPopup(lockerInfo);
-                            markerClusterGroup.addLayer(marker);
-                        }
-                    });
-                })
-                .catch(err => console.error("Failed to fetch lockers:", err));
-        }
-
-    </script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

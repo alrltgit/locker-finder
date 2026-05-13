@@ -1,0 +1,101 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+}
+
+html,
+body {
+    height: 100%;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.top {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: left;
+    align-items: center;
+    gap: 20px;
+    padding: 10px;
+}
+
+#title {
+    margin: 0;
+    font-weight: bold;
+    white-space: nowrap;
+    font-size: 25px;
+}
+
+#options {
+    appearance: none;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    padding: 9px 22px;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    background-color: #ffffff;
+    color: #333;
+    outline: none;
+}
+
+#location-notice {
+    width: 100%;
+    padding: 8px 12px;
+    font-size: 13px;
+    text-align: center;
+}
+
+#map {
+    height: 90vh;
+    width: 100%;
+}
+
+/* small cluster (less than 10 markers) */
+.marker-cluster-small {
+    width: 42px !important;
+    height: 42px !important;
+}
+
+.marker-cluster-small div {
+    width: 32px !important;
+    height: 32px !important;
+    line-height: 32px !important;
+    font-size: 18px;
+}
+
+/* medium cluster (10-99 markers) */
+.marker-cluster-medium {
+    width: 50px !important;
+    height: 50px !important;
+    border-radius: 50% !important;
+}
+
+.marker-cluster-medium div {
+    width: 40px !important;
+    height: 40px !important;
+    line-height: 40px !important;
+    font-size: 20px;
+    border-radius: 50% !important;
+}
+
+/* large cluster (100+ markers) */
+.marker-cluster-large {
+    width: 58px !important;
+    height: 58px !important;
+    border-radius: 50% !important;
+}
+
+.marker-cluster-large div {
+    width: 48px !important;
+    height: 48px !important;
+    line-height: 48px !important;
+    font-size: 17px;
+    border-radius: 50% !important;
+}

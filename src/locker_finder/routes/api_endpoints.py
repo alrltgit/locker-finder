@@ -10,6 +10,17 @@ bp = Blueprint("lockers", __name__)
 def display_map():
     return render_template("index.html")
 
+@bp.route("/api/all/lockers")
+def get_lockers():
+    all_lockers = []
+
+    with get_session() as session:
+        repository = LockerRepository(session)
+        all_lockers = repository.get_all_lockers()
+
+    return jsonify([ locker.model_dump() for locker in all_lockers ])
+
+
 @bp.route("/api/lockers/nearest")
 def get_nearest_lockers():
     user_lat = request.args.get("lat")

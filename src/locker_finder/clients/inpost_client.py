@@ -46,72 +46,16 @@ class InPostClient:
     def _is_test_data(item):
         location = item.get("location", {})
         address_details = item.get("address_details", {})
+        address = item.get("address", {})
 
         markers = ["test", "x"]
         city = address_details.get("city").lower()
 
         if (location.get("latitude") == 0 and location.get("longitude") == 0)\
-            or (city in markers or city == "Test"):
+            or (city in markers or city == "Test") or address.get("line1").lower() == "x x":
             return True
 
         return False
-
-    def seed_lockers_to_db(self):
-        buffer = StringIO()
-        writer = csv.writer(buffer)
-
-        pages_data = self._fetch_pages_in_parallel(1, 1360)
-
-        seen_names = set()
-
-        for page_data in pages_data:
-            items = page_data.get("items", [])
-
-            for item in items:
-                if self._is_test_data(item):
-                    continue
-
-                name = item.get("name")
-                if name in seen_names:
-                    continue
-                seen_names.add(name)
-
-                row = self.parse_data(item)
-                writer.writerow(row)
-
-        buffer.seek(0)
-
-        connection = engine.raw_connection()
-        cursor = connection.cursor()
-
-        try:
-            cursor.copy_expert(
-                """
-                COPY locker_finder.lockers (
-                    id,
-                    external_href,
-                    name,
-                    type,
-                    status,
-                    physical_type,
-                    lat,
-                    lon,
-                    address_line1,
-                    address_line2,
-                    city,
-                    province,
-                    post_code,
-                    open_hours,
-                    is_24_7
-                )
-                FROM STDIN WITH CSV
-                """,
-                buffer
-            )
-            connection.commit()
-        finally:
-            cursor.close()
-            connection.close()
 
     def sync_lockers(self):
         pages_data = self._fetch_pages_in_parallel(1, 1360)
