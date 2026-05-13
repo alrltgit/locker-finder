@@ -1,4 +1,8 @@
-var map = L.map('map').setView([51.9194, 19.1451], 6)
+// TODO: DNS URL
+API_URL="http://localhost:5001";
+LOCKER_URL=`${API_URL}/api/all/lockers`;
+
+var map = L.map('map').setView([51.9194, 19.1451], 6);
 
 L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
     maxZoom: 19,
@@ -76,7 +80,7 @@ function renderLockers(data) {
 }
 
 function fetchAllLockers() {
-    fetch("/api/all/lockers")
+    fetch(LOCKER_URL)
         .then(response => {
             if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
             return response.json();

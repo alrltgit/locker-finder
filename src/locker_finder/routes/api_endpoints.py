@@ -6,9 +6,9 @@ from ..db.database import get_session
 
 bp = Blueprint("lockers", __name__)
 
-@bp.route("/")
-def display_map():
-    return render_template("index.html")
+# @bp.route("/")
+# def display_map():
+#     return render_template("index.html")
 
 @bp.route("/api/all/lockers")
 def get_lockers():
