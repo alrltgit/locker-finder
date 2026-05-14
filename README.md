@@ -31,7 +31,7 @@ When the application starts:
 The database is seeded only once. Docker volumes keep the data persistent between container restarts.
 
 ### Location-Based Search
-**"Near me" mode**
+**"Near me" mode**<br>
 "Near me" is the default mode. In this mode the frontend requests the user's current location from the browser and sends the coordinates as query parameters to the backend.
 
 Using latitude and longitude values, backend:
@@ -42,7 +42,7 @@ Using latitude and longitude values, backend:
 
 The frontend then renders the lockers as map markers.
 
-**"All" mode**
+**"All" mode** <br>
 When the user selects the "All" option, the backend returns all locker records stored in the database. The frontend renders every locker on the map using its coordinates from the database.
 
 In both modes, clicking a marker displays locker information, including:
@@ -111,13 +111,13 @@ From the root of the project run:
 `make up`
 
 ### Prerequisites
-python 3.13
-flask 3.1
-psycopg2-binary
-requests 2.28
-python-dotenv
-sqlmodel 0.0.38
-alembic 1.16.5
+python 3.13<br>
+flask 3.1<br>
+psycopg2-binary<br>
+requests 2.28<br>
+python-dotenv<br>
+sqlmodel 0.0.38<br>
+alembic 1.16.5<br>
 
 ### Build & run
 ```bash
