@@ -45,7 +45,7 @@ The frontend then renders the lockers as map markers.
 **"All" mode**
 When the user selects the "All" option, the backend returns all locker records stored in the database. The frontend renders every locker on the map using its coordinates from the database.
 
-In both modes, clocking a marker displays locker information, including:
+In both modes, clicking a marker displays locker information, including:
 - name
 - address 
 - opening hours 
@@ -84,8 +84,8 @@ Database schema migrations are managed with Alembic.
 To keep the local database synchronized with the external API, the application uses a scheduled synchronization mechanism powered by Cron.
 
 The scheduler once a day:
-- fetches API data nad stores it in a temporary table
-- copies the data from the temporary table in lockers table
+- fetches API data and stores it in a temporary table
+- copies data from the temporary table in lockers table
 - if data doesn't exist in the table, inserts a new row
 - if data is in the table, updates the existing row with a new value
 - removes rows from the table that are not present in the temporary table.
@@ -115,14 +115,14 @@ If applicable, include:
 
 ### Database:
 - PostgreSQL
-- SQLmodel ORM
+- SQLModel ORM
 - Alembic (migration tool)
 
 ### Containerization & Deployment:
-- Docker & Docker compose
+- Docker & Docker Compose
 
 ### Scheduler:
-- Cron Scheduler
+- Cron
 
 ### Version Control tools:
 - Git & GitHub
