@@ -1,6 +1,3 @@
-include .env
-export
-
 .PHONY: install build run up down reset db
 
 install:
@@ -21,8 +18,5 @@ seed:
 	python3 -m src.locker_finder.scripts.seed
 
 run: build up
-
-db:
-	docker exec -it ${POSTGRES_DB} psql -U ${POSTGRES_USER} -d ${POSTGRES_DB}
 
 setup: install build up seed
