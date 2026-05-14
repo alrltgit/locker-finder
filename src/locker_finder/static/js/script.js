@@ -1,5 +1,5 @@
 // TODO: DNS URL
-API_URL="http://localhost:5001";
+API_URL="https://like-truth-closure-boss.trycloudflare.com";
 LOCKER_URL=`${API_URL}/api/all/lockers`;
 
 var map = L.map('map').setView([51.9194, 19.1451], 6);
