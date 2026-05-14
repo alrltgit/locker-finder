@@ -93,7 +93,7 @@ function fetchAllLockers() {
 }
 
 function fetchNearestLockers(lat, lon) {
-    fetch(`/api/lockers/nearest?lat=${lat}&lon=${lon}`)
+    fetch(`${API_URL}/api/lockers/nearest?lat=${lat}&lon=${lon}`)
         .then(response => {
             if (!response.ok) throw new Error(`HTTP error: ${response.status}`);
             return response.json();
