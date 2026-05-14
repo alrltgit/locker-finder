@@ -125,19 +125,21 @@ alembic 1.16.5
 git clone https://github.com/alrltgit/locker-finder.git locker-finder
 cd locker-finder
 
-# 2. Create virtual environment
+# 2. create .env file using .env.example file as a template
+
+# 3. Create virtual environment
 python -m venv venv
 
-# 3. Activate virtual environment on Linux/MacOS
+# 4. Activate virtual environment on Linux/MacOS
 # Linux / MacOS
 source venv/bin/activate
 # Windows
 venv\Scripts\activate
 
-# 4. IMPORTANT: Start Docker Desktop
+# 5. IMPORTANT: Start Docker Desktop
 # (Make sure Docker Desktop is running before continuing)
 
-# 5. Run the application (initial setup)
+# 6. Run the application (initial setup)
 make setup
 ```
 
