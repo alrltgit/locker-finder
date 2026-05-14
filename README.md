@@ -2,8 +2,8 @@
 
 ## Author
 
-- **Alina Ralcewicz:** [Your full name]
-- **alina.ralcewicz@gmail.com:** [Your contact email]
+- **name:** Alina Ralcewicz
+- **email:** alina.ralcewicz@gmail.com
 
 ## Overview
 LockerMap is a web app that helps users find InPost parcel lockers across Poland.
@@ -96,8 +96,6 @@ This ensures that lockers table remains up to date without requiring manual chan
 
 The backend and frontend run in a single Docker container. Since the frontend is mainly a single index.html file served by Flask, a separate frontend service was not needed.
 
-[Describe your solution in detail. What does it do? How does it work? What approach did you take and why? Cover the key technical choices, architecture, and anything else that helps us understand your project without reading every line of code.]
-
 If applicable, include:
 - a link to the deployed solution
 - screenshots of the UI or key outputs
@@ -129,8 +127,6 @@ If applicable, include:
 ### Version Control tools:
 - Git & GitHub
 
-[List the technologies, frameworks, and libraries you used. You can also explain why you decided to use them.]
-
 ## How to run
 
 From the root of the project run:
@@ -146,8 +142,6 @@ sqlmodel 0.0.38
 sqlmodel-slim 0.0.35
 alembic 1.16.5
 
-[List everything needed to build and run your solution — language version, tools, system dependencies, etc.]
-
 ### Build & run
 ```bash
 # 1. Clone the repository and move to the locker-finder folder
@@ -162,7 +156,6 @@ python -m venv venv
 source venv/bin/activate
 # Windows
 venv\Scripts\activate
-
 
 # 4. IMPORTANT: Start Docker Desktop
 # (Make sure Docker Desktop is running before continuing)
@@ -183,11 +176,27 @@ make run # start containers on not initial setups
 
 ## What I would do with more time
 
-[If you had another week, what would you add, refactor, or change? Prioritize — what would you tackle first and why?]
+If I had one more week, I would:
+
+**Add more filtering options** — for example, letting users show only active lockers or lockers of a specific type. This would make searching more convenient.
+**Improve map performance** — especially when zooming out and rendering a large number of markers. I would work on making the map smoother and faster.
+**Deploy the application** — prepare and deploy the app to a production environment.
+
+The first thing I would focus on would be performance improvements, because the map is the main part of the application and smooth interaction is important for the overall user experience.
 
 ## AI usage
 
-[Did you use AI tools (ChatGPT, Copilot, Claude, etc.) while working on this? If yes, describe how — which parts did they help with, and how did you verify and adapt their output?]
+I used Claude and ChatGPT throughout the project as development assistants. They helped me with:
+
+**Docker & deployment** — setting up docker-compose.yml, writing the Dockerfile, and configuring Alembic migrations to run on container startup
+**Backend** — planning the data synchronization between the InPost API and the database
+**Frontend** — generating JavaScript code, fixing bugs, improving marker rendering performance, and writing CSS
+**Software architecture** — designing the project structure, including models and package organization
+
+I verified and adapted the generated output by:
+- running the code and checking if it worked as expected
+- reading error logs and understanding issues before applying fixes
+- adjusting suggestions to match my project structure instead of copying them directly
 
 ## Anything else?
 
