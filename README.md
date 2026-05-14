@@ -77,8 +77,6 @@ The scheduler once a day:
 
 This ensures that lockers table remains up to date without requiring manual changes in the database.
 
-## Deployment Approach
-
 The backend and frontend run in a single Docker container. Since the frontend is mainly a single index.html file served by Flask, a separate frontend service was not needed.
 
 ## Technologies
@@ -91,7 +89,7 @@ The backend and frontend run in a single Docker container. Since the frontend is
 - HTML5
 - CSS3
 - JavaScript
-- Leaflet.js library
+- Leaflet library
 
 ### Database:
 - PostgreSQL
