@@ -14,9 +14,6 @@ down:
 
 reset: down up
 
-seed:
-	python3 -m src.locker_finder.scripts.seed
-
 run: build up
 
-setup: install build up seed
+setup: install build up
