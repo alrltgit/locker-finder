@@ -125,21 +125,24 @@ alembic 1.16.5<br>
 git clone https://github.com/alrltgit/locker-finder.git locker-finder
 cd locker-finder
 
-# 2. Open .env and set your values: POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
-
-# 3. Create virtual environment
+# 2. Create virtual environment
 python3 -m venv venv
 
-# 4. Activate virtual environment on Linux/MacOS
+# 3. Activate virtual environment
 # Linux / MacOS
 source venv/bin/activate
 # Windows
 venv\Scripts\activate
 
-# 5. IMPORTANT: Start Docker Desktop
+# 4. IMPORTANT: Start Docker Desktop
 # (Make sure Docker Desktop is running before continuing)
 
-# 6. Run the application (initial setup)
+# 5. Create folders
+make init
+
+# 6. Open .env and set your values: POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
+
+# 7. Run the application (initial setup)
 make setup
 ```
 
