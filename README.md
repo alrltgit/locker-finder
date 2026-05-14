@@ -125,7 +125,7 @@ alembic 1.16.5<br>
 git clone https://github.com/alrltgit/locker-finder.git locker-finder
 cd locker-finder
 
-# 2. create .env file using .env.example file as a template
+# 2. Open .env and set your values: POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
 
 # 3. Create virtual environment
 python3 -m venv venv
