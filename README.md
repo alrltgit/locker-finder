@@ -18,7 +18,7 @@ including:
 The app helps users quickly find a convenient parcel locker without using InPost’s interface.
 
 ## Demo & Description
-
+![Demo](demo.gif)
 ### How it works
 
 ### Data import and validation
