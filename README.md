@@ -85,10 +85,10 @@ To keep the local database synchronized with the external API, the application u
 
 The scheduler once a day:
 - fetches API data nad stores it in a temporary table
-- copy the data from the temporary table in lockers table
-- if data doesn't exist in the table insert a new row
-- if data is in the table, update the existing row with a new value
-- remove rows from the table that are not present in the temporary table.
+- copies the data from the temporary table in lockers table
+- if data doesn't exist in the table, inserts a new row
+- if data is in the table, updates the existing row with a new value
+- removes rows from the table that are not present in the temporary table.
 
 This ensures that lockers table remains up to date without requiring manual changes in the database.
 
@@ -200,4 +200,10 @@ I verified and adapted the generated output by:
 
 ## Anything else?
 
-[Is there something we should know that doesn't fit the sections above? A design choice that needs context, a creative twist, a rabbit hole you went down — this is your space.]
+The initial idea was to build an app that shows the ten nearest lockers based on the user’s location. Later, I added an option to view all locker locations across Poland to make the app more useful than just local search.
+
+I decided to keep everything in a single backend service using Flask because the frontend is small and does not need a separate framework or build setup.
+
+During development, I also needed a fast way to store a large amount of paginated API data in the database. Saving records one by one was too slow, so I improved the process by fetching multiple API pages in parallel using a thread pool.
+
+After fetching the data, instead of inserting rows one by one, I collected everything in memory and used a bulk insert approach with PostgreSQL COPY and a temporary staging table to load the data into the database.
