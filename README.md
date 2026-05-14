@@ -128,7 +128,7 @@ cd locker-finder
 # 2. create .env file using .env.example file as a template
 
 # 3. Create virtual environment
-python -m venv venv
+python3 -m venv venv
 
 # 4. Activate virtual environment on Linux/MacOS
 # Linux / MacOS

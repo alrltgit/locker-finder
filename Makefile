@@ -3,6 +3,9 @@ export
 
 .PHONY: install build run up down reset db
 
+install:
+	pip install -e .
+
 build:
 	docker-compose build --no-cache
 
@@ -22,4 +25,4 @@ run: build up
 db:
 	docker exec -it ${POSTGRES_DB} psql -U ${POSTGRES_USER} -d ${POSTGRES_DB}
 
-setup: build up seed
+setup: install build up seed
