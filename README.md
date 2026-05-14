@@ -1,4 +1,4 @@
-# LockerMap
+# LockerFinder
 
 ## Author
 
@@ -6,7 +6,7 @@
 - **email:** alina.ralcewicz@gmail.com
 
 ## Overview
-LockerMap is a web app that helps users find InPost parcel lockers across Poland.
+LockerFinder is a web app that helps users find InPost parcel lockers across Poland.
 It detects user's location and displays ten nearest lockers on a map, or lets users browse
 all lockers across Poland. Clicking a locker marker shows information about the locker, 
 including:
@@ -36,7 +36,7 @@ The database is seeded only once. Docker volumes keep the data persistent betwee
 
 Using latitude and longitude values, backend:
 - Queries the database
-- Finds the 10 nearest lockers
+- Finds the ten nearest lockers
 - Formats the results as JSON
 - Sends the response to the frontend
 
@@ -54,30 +54,15 @@ In both modes, clicking a marker displays locker information, including:
 
 To improve usability and performance, markers are automatically grouped into clusters when zooming out.
 
-### Backend Architecture
-The backend is implemented in Python using the Flask framework.
-The application follows a modular architecture, separating responsibilities into independent layers such as:
-- clients model
-- database access
-- database repository
-- API routes
-- business logic
-- scripts
-- services model
-- utility model
-
-This structure has been used to improve maintainability and code readability.
-Database operations are handled using SQLModel ORM, providing typed models and simplified interaction with PostgreSQL.
-
 ### Database & Migrations
 
 The PostgreSQL database runs inside a Docker container using an external PostgreSQL image.
 
 During initialization:
 - the locker_finder_db database is created
-- the locker_finder schema and the lockers table are created through migrations
+- the locker_finder schema and the lockers table are created through migration
 
-Database schema migrations are managed with Alembic.
+Database schema migration is managed with Alembic.
 
 ### Synchronization & Scheduling
 
@@ -96,11 +81,6 @@ This ensures that lockers table remains up to date without requiring manual chan
 
 The backend and frontend run in a single Docker container. Since the frontend is mainly a single index.html file served by Flask, a separate frontend service was not needed.
 
-If applicable, include:
-- a link to the deployed solution
-- screenshots of the UI or key outputs
-- a short screen recording or demo video
-
 ## Technologies
 
 ### Backend:
@@ -118,7 +98,7 @@ If applicable, include:
 - SQLModel ORM
 - Alembic (migration tool)
 
-### Containerization & Deployment:
+### Containerization:
 - Docker & Docker Compose
 
 ### Scheduler:
@@ -130,7 +110,7 @@ If applicable, include:
 ## How to run
 
 From the root of the project run:
-`make run`
+`make up`
 
 ### Prerequisites
 python 3.13
@@ -139,7 +119,6 @@ psycopg2-binary
 requests 2.28
 python-dotenv
 sqlmodel 0.0.38
-sqlmodel-slim 0.0.35
 alembic 1.16.5
 
 ### Build & run
@@ -168,7 +147,7 @@ make setup
 ```bash
 make down # stop containers
 
-make run # start containers on not initial setups
+make up # start containers on not initial setups
 ```
 
 ### Open the application
@@ -179,7 +158,9 @@ make run # start containers on not initial setups
 If I had one more week, I would:
 
 **Add more filtering options** — for example, letting users show only active lockers or lockers of a specific type. This would make searching more convenient.
+
 **Improve map performance** — especially when zooming out and rendering a large number of markers. I would work on making the map smoother and faster.
+
 **Deploy the application** — prepare and deploy the app to a production environment.
 
 The first thing I would focus on would be performance improvements, because the map is the main part of the application and smooth interaction is important for the overall user experience.
@@ -189,8 +170,11 @@ The first thing I would focus on would be performance improvements, because the 
 I used Claude and ChatGPT throughout the project as development assistants. They helped me with:
 
 **Docker & deployment** — setting up docker-compose.yml, writing the Dockerfile, and configuring Alembic migrations to run on container startup
+
 **Backend** — planning the data synchronization between the InPost API and the database
+
 **Frontend** — generating JavaScript code, fixing bugs, improving marker rendering performance, and writing CSS
+
 **Software architecture** — designing the project structure, including models and package organization
 
 I verified and adapted the generated output by:
