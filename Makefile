@@ -1,7 +1,7 @@
-include .env
-export
-
 .PHONY: install build run up down reset db
+
+install:
+	pip install -e .
 
 build:
 	docker-compose build --no-cache
@@ -14,12 +14,12 @@ down:
 
 reset: down up
 
-seed:
-	python3 -m src.locker_finder.scripts.seed
-
 run: build up
 
-db:
-	docker exec -it ${POSTGRES_DB} psql -U ${POSTGRES_USER} -d ${POSTGRES_DB}
+setup: install build up
 
-setup: build up seed
+init:
+	mkdir -p postgres_data
+	cp -n .env.example .env
+
+setup: install build up

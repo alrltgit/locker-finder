@@ -1,4 +1,4 @@
-FROM python:3.13
+FROM python:3.13-slim
 
 WORKDIR /locker_finder
 
@@ -16,5 +16,4 @@ RUN crontab /etc/cron.d/locker-sync
 
 EXPOSE 5000
 
-#CMD alembic upgrade head && gunicorn --bind 0.0.0.0:5000 "src.locker_finder:create_app()"
-CMD cron && alembic upgrade head && flask run --host=0.0.0.0 --port=5000
+CMD ["sh", "-c", "cron && alembic upgrade head && python3 -m src.locker_finder.scripts.seed && flask run --host=0.0.0.0 --port=5000"]

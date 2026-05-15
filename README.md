@@ -1,12 +1,12 @@
-# LockerMap
+# LockerFinder
 
 ## Author
 
-- **Alina Ralcewicz:** [Your full name]
-- **alina.ralcewicz@gmail.com:** [Your contact email]
+- **name:** Alina Ralcewicz
+- **email:** alina.ralcewicz@gmail.com
 
 ## Overview
-LockerMap is a web app that helps users find InPost parcel lockers across Poland.
+LockerFinder is a web app that helps users find InPost parcel lockers across Poland.
 It detects user's location and displays ten nearest lockers on a map, or lets users browse
 all lockers across Poland. Clicking a locker marker shows information about the locker, 
 including:
@@ -18,7 +18,7 @@ including:
 The app helps users quickly find a convenient parcel locker without using InPost’s interface.
 
 ## Demo & Description
-
+![Demo](demo.gif)
 ### How it works
 
 ### Data import and validation
@@ -31,21 +31,21 @@ When the application starts:
 The database is seeded only once. Docker volumes keep the data persistent between container restarts.
 
 ### Location-Based Search
-**"Near me" mode**
+**"Near me" mode**<br>
 "Near me" is the default mode. In this mode the frontend requests the user's current location from the browser and sends the coordinates as query parameters to the backend.
 
 Using latitude and longitude values, backend:
 - Queries the database
-- Finds the 10 nearest lockers
+- Finds the ten nearest lockers
 - Formats the results as JSON
 - Sends the response to the frontend
 
 The frontend then renders the lockers as map markers.
 
-**"All" mode**
+**"All" mode** <br>
 When the user selects the "All" option, the backend returns all locker records stored in the database. The frontend renders every locker on the map using its coordinates from the database.
 
-In both modes, clocking a marker displays locker information, including:
+In both modes, clicking a marker displays locker information, including:
 - name
 - address 
 - opening hours 
@@ -54,54 +54,30 @@ In both modes, clocking a marker displays locker information, including:
 
 To improve usability and performance, markers are automatically grouped into clusters when zooming out.
 
-### Backend Architecture
-The backend is implemented in Python using the Flask framework.
-The application follows a modular architecture, separating responsibilities into independent layers such as:
-- clients model
-- database access
-- database repository
-- API routes
-- business logic
-- scripts
-- services model
-- utility model
-
-This structure has been used to improve maintainability and code readability.
-Database operations are handled using SQLModel ORM, providing typed models and simplified interaction with PostgreSQL.
-
 ### Database & Migrations
 
 The PostgreSQL database runs inside a Docker container using an external PostgreSQL image.
 
 During initialization:
 - the locker_finder_db database is created
-- the locker_finder schema and the lockers table are created through migrations
+- the locker_finder schema and the lockers table are created through migration
 
-Database schema migrations are managed with Alembic.
+Database schema migration is managed with Alembic.
 
 ### Synchronization & Scheduling
 
 To keep the local database synchronized with the external API, the application uses a scheduled synchronization mechanism powered by Cron.
 
 The scheduler once a day:
-- fetches API data nad stores it in a temporary table
-- copy the data from the temporary table in lockers table
-- if data doesn't exist in the table insert a new row
-- if data is in the table, update the existing row with a new value
-- remove rows from the table that are not present in the temporary table.
+- fetches API data and stores it in a temporary table
+- copies data from the temporary table in lockers table
+- if data doesn't exist in the table, inserts a new row
+- if data is in the table, updates the existing row with a new value
+- removes rows from the table that are not present in the temporary table.
 
 This ensures that lockers table remains up to date without requiring manual changes in the database.
 
-## Deployment Approach
-
 The backend and frontend run in a single Docker container. Since the frontend is mainly a single index.html file served by Flask, a separate frontend service was not needed.
-
-[Describe your solution in detail. What does it do? How does it work? What approach did you take and why? Cover the key technical choices, architecture, and anything else that helps us understand your project without reading every line of code.]
-
-If applicable, include:
-- a link to the deployed solution
-- screenshots of the UI or key outputs
-- a short screen recording or demo video
 
 ## Technologies
 
@@ -113,40 +89,35 @@ If applicable, include:
 - HTML5
 - CSS3
 - JavaScript
-- Leaflet.js library
+- Leaflet library
 
 ### Database:
 - PostgreSQL
-- SQLmodel ORM
+- SQLModel ORM
 - Alembic (migration tool)
 
-### Containerization & Deployment:
-- Docker & Docker compose
+### Containerization:
+- Docker & Docker Compose
 
 ### Scheduler:
-- Cron Scheduler
+- Cron
 
 ### Version Control tools:
 - Git & GitHub
 
-[List the technologies, frameworks, and libraries you used. You can also explain why you decided to use them.]
-
 ## How to run
 
 From the root of the project run:
-`make run`
+`make up`
 
 ### Prerequisites
-python 3.13
-flask 3.1
-psycopg2-binary
-requests 2.28
-python-dotenv
-sqlmodel 0.0.38
-sqlmodel-slim 0.0.35
-alembic 1.16.5
-
-[List everything needed to build and run your solution — language version, tools, system dependencies, etc.]
+python 3.13<br>
+flask 3.1<br>
+psycopg2-binary<br>
+requests 2.28<br>
+python-dotenv<br>
+sqlmodel 0.0.38<br>
+alembic 1.16.5<br>
 
 ### Build & run
 ```bash
@@ -155,19 +126,23 @@ git clone https://github.com/alrltgit/locker-finder.git locker-finder
 cd locker-finder
 
 # 2. Create virtual environment
-python -m venv venv
+python3 -m venv venv
 
-# 3. Activate virtual environment on Linux/MacOS
+# 3. Activate virtual environment
 # Linux / MacOS
 source venv/bin/activate
 # Windows
 venv\Scripts\activate
 
-
 # 4. IMPORTANT: Start Docker Desktop
 # (Make sure Docker Desktop is running before continuing)
 
-# 5. Run the application (initial setup)
+# 5. Create folders
+make init
+
+# 6. Open .env and set your values: POSTGRES_USER, POSTGRES_PASSWORD, POSTGRES_DB
+
+# 7. Run the application (initial setup)
 make setup
 ```
 
@@ -175,7 +150,7 @@ make setup
 ```bash
 make down # stop containers
 
-make run # start containers on not initial setups
+make up # start containers on not initial setups
 ```
 
 ### Open the application
@@ -183,12 +158,39 @@ make run # start containers on not initial setups
 
 ## What I would do with more time
 
-[If you had another week, what would you add, refactor, or change? Prioritize — what would you tackle first and why?]
+If I had one more week, I would:
+
+**Add more filtering options** — for example, letting users show only active lockers or lockers of a specific type. This would make searching more convenient.
+
+**Improve map performance** — especially when zooming out and rendering a large number of markers. I would work on making the map smoother and faster.
+
+**Deploy the application** — prepare and deploy the app to a production environment.
+
+The first thing I would focus on would be performance improvements, because the map is the main part of the application and smooth interaction is important for the overall user experience.
 
 ## AI usage
 
-[Did you use AI tools (ChatGPT, Copilot, Claude, etc.) while working on this? If yes, describe how — which parts did they help with, and how did you verify and adapt their output?]
+I used Claude and ChatGPT throughout the project as development assistants. They helped me with:
+
+**Docker & deployment** — setting up docker-compose.yml, writing the Dockerfile, and configuring Alembic migrations to run on container startup
+
+**Backend** — planning the data synchronization between the InPost API and the database
+
+**Frontend** — generating JavaScript code, fixing bugs, improving marker rendering performance, and writing CSS
+
+**Software architecture** — designing the project structure, including models and package organization
+
+I verified and adapted the generated output by:
+- running the code and checking if it worked as expected
+- reading error logs and understanding issues before applying fixes
+- adjusting suggestions to match my project structure instead of copying them directly
 
 ## Anything else?
 
-[Is there something we should know that doesn't fit the sections above? A design choice that needs context, a creative twist, a rabbit hole you went down — this is your space.]
+The initial idea was to build an app that shows the ten nearest lockers based on the user’s location. Later, I added an option to view all locker locations across Poland to make the app more useful than just local search.
+
+I decided to keep everything in a single backend service using Flask because the frontend is small and does not need a separate framework or build setup.
+
+During development, I also needed a fast way to store a large amount of paginated API data in the database. Saving records one by one was too slow, so I improved the process by fetching multiple API pages in parallel using a thread pool.
+
+After fetching the data, instead of inserting rows one by one, I collected everything in memory and used a bulk insert approach with PostgreSQL COPY and a temporary staging table to load the data into the database.
