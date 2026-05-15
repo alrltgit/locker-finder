@@ -19,6 +19,9 @@ The app helps users quickly find a convenient parcel locker without using InPost
 
 ## Demo & Description
 ![Demo](demo.gif)
+
+Deployed app - https://locker-finder.pages.dev/
+
 ### How it works
 
 ### Data import and validation
@@ -158,15 +161,9 @@ make up # start containers on not initial setups
 
 ## What I would do with more time
 
-If I had one more week, I would:
-
-**Add more filtering options** — for example, letting users show only active lockers or lockers of a specific type. This would make searching more convenient.
-
-**Improve map performance** — especially when zooming out and rendering a large number of markers. I would work on making the map smoother and faster.
-
-**Deploy the application** — prepare and deploy the app to a production environment.
-
-The first thing I would focus on would be performance improvements, because the map is the main part of the application and smooth interaction is important for the overall user experience.
+If I had one more week, I would add more filtering options — for example, letting users show only active lockers or lockers of a specific type. 
+This would make searching more convenient.<br>
+I would also add tests for the app.
 
 ## AI usage
 
