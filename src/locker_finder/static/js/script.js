@@ -1,4 +1,3 @@
-// TODO: DNS URL
 API_URL="https://like-truth-closure-boss.trycloudflare.com";
 LOCKER_URL=`${API_URL}/api/all/lockers`;
 
