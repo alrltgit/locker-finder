@@ -20,8 +20,6 @@ The app helps users quickly find a convenient parcel locker without using InPost
 ## Demo & Description
 ![Demo](demo.gif)
 
-Deployed app - https://locker-finder.pages.dev/
-
 ### How it works
 
 ### Data import and validation
