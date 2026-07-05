@@ -1,10 +1,5 @@
 # LockerFinder
 
-## Author
-
-- **name:** Alina Ralcewicz
-- **email:** alina.ralcewicz@gmail.com
-
 ## Overview
 LockerFinder is a web app that helps users find InPost parcel lockers across Poland.
 It detects user's location and displays ten nearest lockers on a map, or lets users browse
